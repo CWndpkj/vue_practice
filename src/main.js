@@ -6,9 +6,12 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { createPinia } from 'pinia'
 import '@/api/mock'
-import '@/api/request'
+import api from '@/api/api'
+import config from '@/config'
 const app = createApp(App)
 const pinia = createPinia()
+app.config.globalProperties.$api = api
+app.config.globalProperties.$config = config
 app.use(router)
 app.use(ElementPlus)
 app.use(pinia)

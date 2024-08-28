@@ -20,7 +20,7 @@
     <el-col :span='10'>
       <el-card class="table-card" shadow='hover'>
         <el-table :data='tableData' stripe :height='380'>
-          <el-table-column v-for="(val, key) in tableLabel.value" :key='key' :prop='key' :label='val'></el-table-column>
+          <el-table-column v-for="(val, key) in tableLabel" :key='key' :prop='key' :label='val'></el-table-column>
         </el-table>
       </el-card>
     </el-col>
@@ -28,20 +28,15 @@
 </template>
 
 <script setup>
-import axios from 'axios';
-import { reactive, ref } from 'vue';
-
+import { getCurrentInstance, onMounted, ref } from 'vue';
+const { proxy } = getCurrentInstance()
 const tableData = ref([])
-const tableLabel = reactive({})
-axios({
-  method: 'get',
-  url: '/api/getTableContent',
-}).then((res) => {
-  tableData.value = res.data.tableData
-  tableLabel.value = res.data.tableLabel
-}).catch((err) => {
-  console.log(err);
-});
+const tableLabel = ref({})
+onMounted(async () => {
+  const tableContent = await proxy.$api.getTableContent()
+  tableData.value = tableContent.data.tableData
+  tableLabel.value = tableContent.data.tableLabel
+})
 </script>
 
 <style lang="scss" scoped>
@@ -49,7 +44,6 @@ axios({
   display: flex;
   border-bottom: 1px solid #ccc;
   margin-bottom: 5px;
-  content-align: center;
   align-items: center;
 
   .user-avator {

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-tag class="tag" v-for="tag in store.tags" :key=tag.path :closable="tag.path != '/home' ? true : false"
+    <el-tag class="tag" v-for="tag in store.getTags()" :key=tag.path :closable="tag.path != '/home' ? true : false"
       @close="handleClose(tag)" @click="handleClick(tag)" :effect="tag.path == route.path ? 'dark' : 'plain'">
       {{ tag.label }}
     </el-tag>

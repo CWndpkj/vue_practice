@@ -10,7 +10,7 @@
           <el-input type="password" placeholder="请输入密码" v-model="user.password"></el-input>
         </el-form-item>
       </el-form>
-      <el-button type="primary" style="width: 100%;" @click="handleClick">登录</el-button>
+      <el-button type="primary" style="width: 100%;" @click="handleLogin">登录</el-button>
     </el-card>
   </div>
 </template>
@@ -20,6 +20,7 @@ import { reactive, ref, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAllDataStore } from '../stores';
 import { ElMessage } from 'element-plus';
+import { setupRoutes } from '../router';
 const user = reactive({
   username: '',
   password: ''
@@ -27,12 +28,13 @@ const user = reactive({
 const store = useAllDataStore()
 const { proxy } = getCurrentInstance()
 const router = useRouter()
-const handleClick = () => {
-  const res = proxy.$api.getPermissionContent(user)
+const handleLogin = () => {
+  proxy.$api.getPermissionContent(user)
     .then(res => {
-      console.log(res)
       store.setMenuList(res.data.menuList)
       store.setToken(res.data.token)
+      store.setIsAuthenticated(true)
+      setupRoutes()
       router.push('/home')
     }).catch(err => {
       console.log(err)

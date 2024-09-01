@@ -64,7 +64,6 @@ export const useAllDataStore = defineStore('allData', () => {
       console.log("debug", state.value)
     }
   }
-
   //自动保存到localStorage
   watch(state, (newState) => {
     localStorage.setItem("store", JSON.stringify(newState))

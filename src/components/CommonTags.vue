@@ -17,11 +17,12 @@ const handleClick = (tag) => {
   router.push(tag.path)
 }
 const handleClose = (tag) => {
-  const index = store.tags.findIndex(item => item.path == tag.path)
-  if (index == store.tags.length - 1)
-    router.push(store.tags[index - 1].path)
+  const tags = store.getTags()
+  const index = tags.findIndex(item => item.path == tag.path)
+  if (index == tags.length - 1)
+    router.push(tags[index - 1].path)
   else
-    router.push(store.tags[index + 1].path)
+    router.push(tags[index + 1].path)
   store.removeTag(tag)
 }
 </script>

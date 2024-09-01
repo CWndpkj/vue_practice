@@ -105,17 +105,18 @@ function getPermissionContent(options) {
                 url: "Other1",
                 children: [
                   {
-                    path: "/other1",
-                    name: 'ohter1',
-                    label: "其他1",
+                    path: "/other1-1",
+                    name: "other1-1",
+                    label: "其他1-1",
                     icon: "location",
-                    url: "Other1"
+                    url: "Other1-1"
                   },
                   {
-                    path: "/other2",
-                    label: "其他2",
+                    path: "/other1-2",
+                    name: "other1-2",
+                    label: "其他1-2",
                     icon: "location",
-                    url: "Other2"
+                    url: "Other1-2"
                   }
                 ]
               },

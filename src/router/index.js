@@ -73,6 +73,12 @@ function setupRoutes() {
   store.getMenuList().forEach(item => {
     if (item.children) {
       item.children.forEach(childItem => {
+        if (childItem.children) {
+          childItem.children.forEach(childItem2 => {
+            childItem2.component = modules[`../views/${childItem2.url}.vue`]
+            addRoutes.push(childItem2)
+          })
+        }
         childItem.component = modules[`../views/${childItem.url}.vue`]
         addRoutes.push(childItem)
       })

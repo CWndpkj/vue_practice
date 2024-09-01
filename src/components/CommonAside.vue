@@ -1,25 +1,34 @@
 <template>
-  <el-menu class="el-menu-vertical" :collapse="store.getIsCollapse()" :default-active="activePage">
-    <el-menu-item v-for="item in noChildren" :index="item.path" :key="item.path" @click="handleRoute(item)">
-      <component class="icons" :is="item.icon"></component>
-      <span>{{ item.label }}</span>
-    </el-menu-item>
-    <el-sub-menu v-for="item in hasChildren" :index="item.path" :key="item.path">
-      <!-- <template #title> -->
-      <!--   <component class='icons' :is="item.icon"></component> -->
-      <!--   <span>{{ item.label }}</span> -->
-      <!-- </template> -->
-      <el-sub-menu v-for="item in item.children" :index="item.path" :key="item.path"
-        @click="handleRoute(item)">
-        <!-- <component class="icons" :is="item.icon"></component> -->
-        <!-- <span>{{ subItem.label }}</span> -->
-        <el-menu-item v-if="childrenHasChildren.some(subItem => subItem.path === item.path)"
-          v-for="item in childrenHasChildren" :index="item.path" :key="item.path" @click="handleRoute(item)">
-          <component class="icons" :is="item.icon"></component>
+  <el-menu :default-active="activeMenu" class="el-menu-vertical-demo">
+    <template v-for="item in menuList">
+      <el-sub-menu v-if="item.children" :index="item.path" :key="item.path" @select="handleRoute(item)">
+        <template #title>
+          <component :is="item.icon" class="icons"></component>
           <span>{{ item.label }}</span>
-        </el-menu-item>
+        </template>
+        <template v-for="subItem in item.children">
+          <el-sub-menu v-if="subItem.children" :index="subItem.path" :key="subItem.path" @select="handleRoute(subItem)">
+            <template #title>
+              <component :is="item.icon" class="icons"></component>
+              <span>{{ subItem.label }}</span>
+            </template>
+            <el-menu-item v-for="subSubItem in subItem.children" :index="subSubItem.path" :key="subSubItem.path"
+              @click="handleRoute(subSubItem)">
+              <component :is="item.icon" class="icons"></component>
+              <span>{{ subSubItem.label }}</span>
+            </el-menu-item>
+          </el-sub-menu>
+          <el-menu-item v-else :index="subItem.path" :key="subItem.path" @click="handleRoute(subItem)">
+            <component :is="item.icon" class="icons"></component>
+            <span>{{ subItem.label }}</span>
+          </el-menu-item>
+        </template>
       </el-sub-menu>
-    </el-sub-menu>
+      <el-menu-item v-else :index="item.path" :key="item.path" @click="handleRoute(item)">
+        <component :is="item.icon" class="icons"></component>
+        <span>{{ item.label }}</span>
+      </el-menu-item>
+    </template>
   </el-menu>
 </template>
 
@@ -28,18 +37,11 @@ import { computed } from 'vue';
 import { useAllDataStore } from '../stores';
 import { useRoute, useRouter } from 'vue-router';
 
-const noChildren = computed(() => {
-  return store.getMenuList().filter(item => !item.children)
-})
-const hasChildren = computed(() => {
-  return store.getMenuList().filter(item => item.children)
-})
-const childrenHasChildren = computed(() => {
-  return store.getMenuList().filter(item => item.children && item.children.some(subItem => subItem.children))})
 const router = useRouter()
 const route = useRoute()
 const store = useAllDataStore()
-const activePage = computed(() => route.path)
+const menuList = store.getMenuList()
+const activeMenu = computed(() => route.path)
 const handleRoute = (item) => {
   router.push(item.path)
   console.log(route)
